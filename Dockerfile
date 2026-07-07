@@ -1,24 +1,18 @@
 FROM node:18-alpine
 WORKDIR /app
 
-# Argumento para decidir qué servicio construir (backend o frontend)
-ARG PROCESS_TYPE=backend
-ENV PROCESS_TYPE=$PROCESS_TYPE
-
+# Copiar archivos del proyecto
 COPY . .
 
-# Instalar y compilar según el tipo de proceso
-RUN if [ "$PROCESS_TYPE" = "backend" ]; then \
-      cd backend && npm install; \
-    else \
-      cd Frontend && npm install && npm run build; \
-    fi
+# Instalar dependencias del Backend
+RUN cd backend && npm install
 
-EXPOSE 5001 3000
+# Instalar dependencias del Frontend y compilar la aplicación Next.js
+RUN cd Frontend && npm install && npm run build
 
-# Ejecutar el comando adecuado
-CMD if [ "$PROCESS_TYPE" = "backend" ]; then \
-      cd backend && npm start; \
-    else \
-      cd Frontend && npm start; \
-    fi
+# Exponer el puerto del Frontend (Next.js)
+EXPOSE 3000
+
+# Arrancar el Backend en el puerto 5001 en segundo plano, 
+# y luego el Frontend (Next.js) en primer plano (escuchará en el puerto asignado por Railway)
+CMD cd backend && PORT=5001 npm start & cd Frontend && npm start

@@ -15,7 +15,7 @@ elif [ "$PROCESS_TYPE" = "frontend" ]; then
   npm run build
   npm start
 else
-  echo "🚀 Starting both Frontend and Backend concurrently..."
+  echo "🚀 Starting both Frontend and Backend concurrently (All-in-One)..."
   
   echo "Installing backend dependencies..."
   cd backend
@@ -28,7 +28,7 @@ else
   
   echo "Starting services..."
   cd ../backend
-  npm start &
+  PORT=5001 npm start &
   
   cd ../Frontend
   npm start
