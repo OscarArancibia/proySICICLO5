@@ -4,12 +4,15 @@
   "description": "> Sistema de información para la gestión académica, financiera, control de inventarios y seguridad estudiantil de la **Unidad Educativa Fausto Medrano Sandoval \"A\"**",
   "main": "index.js",
   "scripts": {
+    "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "db:up": "docker compose up -d db",
-    "db:migrate": "docker compose exec -T db psql -U postgres -d proyecto_si1_db -f /docker-entrypoint-initdb.d/02_align_ciclo2.sql && docker compose exec -T db psql -U postgres -d proyecto_si1_db -f /docker-entrypoint-initdb.d/03_asistencia_pagos_inventario.sql && docker compose exec -T db psql -U postgres -d proyecto_si1_db -f /docker-entrypoint-initdb.d/04_demo_data.sql && docker compose exec -T db psql -U postgres -d proyecto_si1_db -f /docker-entrypoint-initdb.d/05_estudiante_estado_inactivo.sql",
+    "db:migrate": "node src/database/migrate.js",
+    "db:seed": "node src/database/seed.js",
+    "db:setup": "npm run db:migrate && npm run db:seed",
     "db:local:start": "pg_ctl -D .pgdata -l .pgdata/server.log -o \"-p 5433 -k /tmp\" start",
     "db:local:stop": "pg_ctl -D .pgdata stop",
-    "db:local:migrate": "psql -h localhost -p 5433 -U postgres -d proyecto_si1_db -f src/database/migrations/001_align_ciclo2.sql -f src/database/migrations/002_asistencia_pagos_inventario.sql -f src/database/migrations/003_demo_data.sql -f src/database/migrations/004_estudiante_estado_inactivo.sql",
+    "db:local:migrate": "node src/database/migrate.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
