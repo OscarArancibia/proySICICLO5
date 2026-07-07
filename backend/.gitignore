@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Local PostgreSQL data
+.pgdata/
+
+# Logs and runtime files
+logs/
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# Local database exports
+*.dump
+*.backup
+*.sql.gz
+
+# Coverage and cache
+coverage/
+.nyc_output/
+.cache/
