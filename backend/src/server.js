@@ -43,11 +43,20 @@ const allowedOrigins = [
   "https://reflex-vagrantly-pettiness.ngrok-free.dev",
 ];
 
+if (process.env.FRONTEND_URL) {
+  allowedOrigins.push(process.env.FRONTEND_URL);
+}
+
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin) return callback(null, true);
 
-    if (allowedOrigins.includes(origin)) {
+    const esPermitido = allowedOrigins.includes(origin) ||
+      origin.endsWith('.railway.app') ||
+      origin.startsWith('http://localhost:') ||
+      origin.startsWith('http://127.0.0.1:');
+
+    if (esPermitido) {
       callback(null, true);
     } else {
       callback(new Error("No permitido por CORS"));
